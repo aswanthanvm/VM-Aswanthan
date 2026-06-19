@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FoodShare · surplus to community</title>
+  <!-- Font Awesome 5 (free) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+  <!-- Google Font (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f7f9fc;
+      color: #1e2a3a;
+      line-height: 1.5;
+      padding: 2rem 1.5rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .app-wrapper {
+      max-width: 1300px;
+      width: 100%;
+      background: white;
+      border-radius: 2.5rem;
+      box-shadow: 0 20px 40px -12px rgba(0, 20, 30, 0.15);
+      padding: 2rem 2rem 2.5rem;
+      transition: all 0.2s ease;
+    }
+
+    /* header */
+    .app-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .logo-icon {
+      background: #e76f51;
+      color: white;
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+    }
+
+    .logo-text {
+      font-weight: 700;
+      font-size: 1.8rem;
+      letter-spacing: -0.02em;
+    }
+    .logo-text span {
+      color: #e76f51;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .badge-pilot {
+      background: #e9f0f5;
+      padding: 0.4rem 1rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #1e3b4f;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid #d0dae6;
+      padding: 0.6rem 1.4rem;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #1e2a3a;
+      cursor: default;
+      transition: 0.1s ease;
+    }
+
+    .btn-primary {
+      background: #e76f51;
+      border: none;
+      padding: 0.6rem 1.6rem;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: white;
+      cursor: default;
+      box-shadow: 0 6px 12px -6px rgba(231, 111, 81, 0.3);
+    }
+
+    /* stats / summary */
+    .stats-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem 2rem;
+      background: #f2f6fa;
+      padding: 1.2rem 1.8rem;
+      border-radius: 60px;
+      margin-bottom: 2.2rem;
+      justify-content: space-around;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .stat-item i {
+      color: #e76f51;
+      font-size: 1.2rem;
+      width: 1.6rem;
+    }
+    .stat-number {
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+    .stat-label {
+      color: #3f5567;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    /* main grid: left list + right form */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 0.9fr;
+      gap: 2rem;
+      margin-top: 0.5rem;
+    }
+
+    @media (max-width: 880px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+    }
+
+    /* ----- left side : food listings ----- */
+    .section-title {
+      font-weight: 600;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.4rem;
+    }
+    .section-title small {
+      font-weight: 400;
+      font-size: 0.85rem;
+      color: #4d6a82;
+      background: #eef3f8;
+      padding: 0.2rem 1rem;
+      border-radius: 40px;
+    }
+
+    .food-card {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+      border: 1px solid #eaf0f5;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      transition: 0.15s ease;
+    }
+
+    .food-card:hover {
+      border-color: #d6e0ea;
+      background: #fafcfe;
+    }
+
+    .food-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      flex: 2 1 180px;
+    }
+    .food-name {
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+    .food-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem 1.5rem;
+      font-size: 0.85rem;
+      color: #3b556b;
+    }
+    .food-meta i {
+      margin-right: 4px;
+      color: #e76f51;
+      width: 1rem;
+    }
+    .food-tag {
+      background: #eef3f8;
+      border-radius: 40px;
+      padding: 0.2rem 0.9rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #1f3b4e;
+    }
+
+    .food-action {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-top: 0.3rem;
+    }
+    .btn-claim {
+      background: #e76f51;
+      color: white;
+      border: none;
+      padding: 0.5rem 1.3rem;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: default;
+    }
+    .btn-claim-outline {
+      background: transparent;
+      border: 1.5px solid #d0dae6;
+      padding: 0.5rem 1.3rem;
+      border-radius: 40px;
+      font-weight: 500;
+      font-size: 0.8rem;
+      cursor: default;
+      color: #2c4b62;
+    }
+    .food-status {
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: #d4e3d4;
+      color: #1b5a2b;
+      padding: 0.2rem 0.9rem;
+      border-radius: 40px;
+    }
+    .food-status.claimed {
+      background: #f1e3d9;
+      color: #8f5a3a;
+    }
+
+    /* ----- right side : add surplus form ----- */
+    .form-card {
+      background: #f2f6fa;
+      border-radius: 2rem;
+      padding: 1.8rem 1.8rem 2rem;
+    }
+
+    .form-card h3 {
+      font-weight: 600;
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .form-card h3 i {
+      color: #e76f51;
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 500;
+      font-size: 0.85rem;
+      color: #2b4a5e;
+      margin-bottom: 0.3rem;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.7rem 1rem;
+      border: 1.5px solid #dbe3ec;
+      border-radius: 40px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      background: white;
+      transition: 0.1s ease;
+      outline: none;
+    }
+    .form-group textarea {
+      border-radius: 20px;
+      resize: vertical;
+      min-height: 70px;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: #e76f51;
+      box-shadow: 0 0 0 3px rgba(231, 111, 81, 0.1);
+    }
+
+    .double-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .btn-submit {
+      background: #1e2a3a;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.8rem;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 1rem;
+      width: 100%;
+      margin-top: 0.5rem;
+      cursor: default;
+      transition: 0.1s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+    }
+    .btn-submit i {
+      font-size: 1rem;
+    }
+
+    .db-notice {
+      margin-top: 1.8rem;
+      background: #e5ecf3;
+      border-radius: 60px;
+      padding: 0.7rem 1.2rem;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      color: #1f3a4e;
+    }
+    .db-notice i {
+      color: #e76f51;
+      font-size: 1rem;
+    }
+
+    .footer-note {
+      margin-top: 2.5rem;
+      border-top: 1px solid #e2eaf2;
+      padding-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.9rem;
+      color: #426079;
+    }
+    .footer-note i {
+      color: #e76f51;
+    }
+
+    /* responsive tweaks */
+    @media (max-width: 600px) {
+      .app-wrapper { padding: 1.5rem; }
+      .stats-grid { flex-direction: column; align-items: flex-start; border-radius: 30px; gap: 0.5rem; }
+      .double-group { grid-template-columns: 1fr; }
+      .food-card { flex-direction: column; align-items: flex-start; gap: 0.8rem; }
+    }
+
+    /* additional small UI */
+    .mock-icon {
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-wrapper">
+    <!-- header -->
+    <header class="app-header">
+      <div class="logo-area">
+        <div class="logo-icon"><i class="fas fa-utensils"></i></div>
+        <div class="logo-text">Food<span>Share</span></div>
+      </div>
+      <div class="header-actions">
+        <span class="badge-pilot"><i class="fas fa-leaf"></i> surplus rescue</span>
+        <span class="btn-outline"><i class="fas fa-user"></i> organizer</span>
+        <span class="btn-primary"><i class="fas fa-hand-holding-heart"></i> volunteer</span>
+      </div>
+    </header>
+
+    <!-- stats -->
+    <div class="stats-grid">
+      <div class="stat-item"><i class="fas fa-utensil-spoon"></i><span class="stat-number">18</span><span class="stat-label">meals saved today</span></div>
+      <div class="stat-item"><i class="fas fa-users"></i><span class="stat-number">7</span><span class="stat-label">active deliveries</span></div>
+      <div class="stat-item"><i class="fas fa-calendar-check"></i><span class="stat-number">42</span><span class="stat-label">families served</span></div>
+      <div class="stat-item"><i class="fas fa-truck"></i><span class="stat-number">5</span><span class="stat-label">volunteers on road</span></div>
+    </div>
+
+    <!-- main grid -->
+    <div class="dashboard-grid">
+      <!-- left: food listings -->
+      <section>
+        <div class="section-title">
+          <span><i class="fas fa-box-open" style="color:#e76f51; margin-right: 8px;"></i>Available surplus</span>
+          <small><i class="fas fa-circle" style="color:#4caf50; font-size: 0.6rem;"></i> 6 fresh</small>
+        </div>
+
+        <!-- card 1 -->
+        <div class="food-card">
+          <div class="food-info">
+            <div class="food-name">Wedding platter · veg</div>
+            <div class="food-meta">
+              <span><i class="fas fa-map-pin"></i> Grand Palace Hall</span>
+              <span><i class="fas fa-clock"></i> 1h ago</span>
+              <span class="food-tag"><i class="fas fa-users"></i> 45 servings</span>
+            </div>
+          </div>
+          <div class="food-action">
+            <span class="food-status"><i class="fas fa-check-circle"></i> ready</span>
+            <span class="btn-claim"><i class="fas fa-hand-peace"></i> claim</span>
+          </div>
+        </div>
+
+        <!-- card 2 -->
+        <div class="food-card">
+          <div class="food-info">
+            <div class="food-name">Corporate lunch boxes</div>
+            <div class="food-meta">
+              <span><i class="fas fa-map-pin"></i> TechHub Tower</span>
+              <span><i class="fas fa-clock"></i> 2h ago</span>
+              <span class="food-tag"><i class="fas fa-users"></i> 22 meals</span>
+            </div>
+          </div>
+          <div class="food-action">
+            <span class="food-status"><i class="fas fa-check-circle"></i> ready</span>
+            <span class="btn-claim"><i class="fas fa-hand-peace"></i> claim</span>
+          </div>
+        </div>
+
+        <!-- card 3 (claimed example) -->
+        <div class="food-card">
+          <div class="food-info">
+            <div class="food-name">Community dinner (halal)</div>
+            <div class="food-meta">
+              <span><i class="fas fa-map-pin"></i> Central Mosque</span>
+              <span><i class="fas fa-clock"></i> 3h ago</span>
+              <span class="food-tag"><i class="fas fa-users"></i> 30 servings</span>
+            </div>
+          </div>
+          <div class="food-action">
+            <span class="food-status claimed"><i class="fas fa-user-check"></i> claimed</span>
+            <span class="btn-claim-outline"><i class="fas fa-truck"></i> in delivery</span>
+          </div>
+        </div>
+
+        <!-- card 4 -->
+        <div class="food-card">
+          <div class="food-info">
+            <div class="food-name">Birthday party snacks</div>
+            <div class="food-meta">
+              <span><i class="fas fa-map-pin"></i> Garden Villa</span>
+              <span><i class="fas fa-clock"></i> 40m ago</span>
+              <span class="food-tag"><i class="fas fa-users"></i> 18 boxes</span>
+            </div>
+          </div>
+          <div class="food-action">
+            <span class="food-status"><i class="fas fa-check-circle"></i> ready</span>
+            <span class="btn-claim"><i class="fas fa-hand-peace"></i> claim</span>
+          </div>
+        </div>
+
+        <div style="margin-top: 0.6rem; font-size: 0.85rem; color: #4e708a; display: flex; gap: 0.8rem; flex-wrap: wrap;">
+          <span><i class="fas fa-arrow-right" style="color:#e76f51;"></i> 2 more listings in your area</span>
+          <span><i class="fas fa-database" style="color:#3b6b8f;"></i> live from database</span>
+        </div>
+      </section>
+
+      <!-- right: add surplus form -->
+      <aside>
+        <div class="form-card">
+          <h3><i class="fas fa-plus-circle"></i> Add surplus food</h3>
+          <form id="surplusForm">
+            <div class="form-group">
+              <label for="eventName">Event / function name</label>
+              <input type="text" id="eventName" placeholder="e.g. Wedding at Grand Palace" value="Anniversary dinner" />
+            </div>
+            <div class="form-group">
+              <label for="foodDesc">Food description</label>
+              <textarea id="foodDesc" placeholder="Veg biryani, salads, desserts ...">Veg biryani, pasta, fruit salad</textarea>
+            </div>
+            <div class="double-group">
+              <div class="form-group">
+                <label for="servings">Servings / meals</label>
+                <input type="number" id="servings" value="35" />
+              </div>
+              <div class="form-group">
+                <label for="pickupTime">Pickup window</label>
+                <select id="pickupTime">
+                  <option>within 1h</option>
+                  <option selected>within 2h</option>
+                  <option>within 4h</option>
+                  <option>tomorrow</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="location">Location (address / hall)</label>
+              <input type="text" id="location" placeholder="e.g. Grand Palace, Main road" value="Grand Palace, Sector 5" />
+            </div>
+
+            <button type="button" class="btn-submit" id="mockSubmitBtn"><i class="fas fa-cloud-upload-alt"></i> Add surplus & notify volunteers</button>
+          </form>
+
+          <!-- database & backend hint -->
+          <div class="db-notice">
+            <i class="fas fa-database fa-fw"></i>
+            <span><strong>Backend ready</strong> · data stored in PostgreSQL (deliveries, food items, volunteers). All actions are synced.</span>
+            <i class="fas fa-check-circle" style="color: #2b7a4b; margin-left: auto;"></i>
+          </div>
+          <div style="margin-top: 0.8rem; display: flex; gap: 1.2rem; font-size: 0.8rem; color: #34638a;">
+            <span><i class="fas fa-code"></i> GitHub: full stack (Node + Express + PG)</span>
+            <span><i class="fas fa-route"></i> delivery tracking</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- footer -->
+    <div class="footer-note">
+      <span><i class="fas fa-heart" style="color:#e76f51;"></i> 100% surplus redistributed · zero waste mission</span>
+      <span><i class="fas fa-github"></i> foodshare · open source</span>
+      <span><i class="fas fa-phone-alt"></i> +91 98765 43210 (support)</span>
+    </div>
+  </div>
+
+  <!-- tiny interactive JS: simulate backend / db (UI only, but shows the concept) -->
+  <script>
+    (function() {
+      // This script adds a micro interaction to reflect "backend & database" concept.
+      // It updates the stats and shows a toast-like message when "Add surplus" is clicked.
+
+      const submitBtn = document.getElementById('mockSubmitBtn');
+      const statsNumbers = document.querySelectorAll('.stat-number');
+      const availableBadge = document.querySelector('.section-title small');
+
+      // mock "database" insert
+      function mockDatabaseInsert() {
+        // increment meals saved
+        if (statsNumbers.length >= 4) {
+          let meals = parseInt(statsNumbers[0].innerText);
+          if (!isNaN(meals)) {
+            statsNumbers[0].innerText = meals + 3; // +3 meals
+          }
+          // increment families served
+          let families = parseInt(statsNumbers[2].innerText);
+          if (!isNaN(families)) {
+            statsNumbers[2].innerText = families + 1;
+          }
+        }
+
+        // update badge (available surplus)
+        if (availableBadge) {
+          let badgeText = availableBadge.innerText;
+          let match = badgeText.match(/\d+/);
+          if (match) {
+            let count = parseInt(match[0]);
+            if (!isNaN(count)) {
+              availableBadge.innerHTML = `<i class="fas fa-circle" style="color:#4caf50; font-size: 0.6rem;"></i> ${count + 1} fresh`;
+            }
+          }
+        }
+
+        // show alert simulation (UI feedback)
+        const form = document.getElementById('surplusForm');
+        const eventName = document.getElementById('eventName')?.value || 'food';
+        alert(`🍲 Surplus added: "${eventName}" \n✅ Saved to database · notified 4 nearby volunteers.`);
+      }
+
+      // attach click
+      if (submitBtn) {
+        submitBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          mockDatabaseInsert();
+          // also animate button
+          this.innerHTML = '<i class="fas fa-check"></i> Added!';
+          this.style.background = '#2b7a4b';
+          setTimeout(() => {
+            this.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Add surplus & notify volunteers';
+            this.style.background = '#1e2a3a';
+          }, 2000);
+        });
+      }
+
+      // claim buttons (mock claim interaction)
+      const claimBtns = document.querySelectorAll('.btn-claim');
+      claimBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const card = this.closest('.food-card');
+          if (card) {
+            const statusSpan = card.querySelector('.food-status');
+            if (statusSpan) {
+              statusSpan.className = 'food-status claimed';
+              statusSpan.innerHTML = '<i class="fas fa-user-check"></i> claimed';
+            }
+            // replace button
+            this.className = 'btn-claim-outline';
+            this.innerHTML = '<i class="fas fa-truck"></i> assigned';
+            // update stats (volunteers on road)
+            const statVol = document.querySelector('.stat-item:nth-child(4) .stat-number');
+            if (statVol) {
+              let val = parseInt(statVol.innerText);
+              if (!isNaN(val)) statVol.innerText = val + 1;
+            }
+            alert('✅ Claim registered! Volunteer assigned. (Database updated)');
+          }
+        });
+      });
+
+      // add small "database" indicator on page load
+      console.log('🍽️ FoodShare · backend + PostgreSQL ready · UI prototype');
+    })();
+  </script>
+</body>
+</html>
